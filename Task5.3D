@@ -1,4 +1,4 @@
-  import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 from tkinter import *
 import tkinter.font
 import time as sleep
@@ -61,7 +61,24 @@ def mcGen():
                         led.off()
                 else:
                         led.on()
+def dot():
+                GPIO.output(led, GPIO.HIGH)
+                sleep(0.5)
+                GPIO.output(led, GPIO.LOW)
+                sleep(0.5)
 
+def dash():
+                GPIO.output(led, GPIO.HIGH)
+                sleep(1.5)
+                GPIO.output(led, GPIO.LOW)
+                sleep(0.5)
+
+#Exit
+def close():
+        GPIO.cleanup()
+        win.destroy()
+
+#Widgets
 #Label
 mcLabel1 = Label(win, text = "Enter Text to Convert Into Morse Code", font = myFont, height = 2, width = 50)
 mcLabel1.pack(pady = 10)
