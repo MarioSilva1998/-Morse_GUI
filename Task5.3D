@@ -1,18 +1,17 @@
 import RPi.GPIO as GPIO
 from tkinter import *
 import tkinter.font
-import time as sleep
-#from gpiozero import LED
+import time 
 
 led = 14
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(led, GPIO.OUT, initial=GPIO.LOW)
 
-#led = LED(14)
 
-#Letters in Morse Code
+#Characters in Morse Code
 MCode = {
+                        #Letters and Numbers
                         'A': '.-',
                         'B': '-...',
                         'C': '-.-.',
@@ -49,6 +48,25 @@ MCode = {
                         '7': '--...',
                         '8': '---..',
                         '9': '----.',
+			#Symbols/Other
+			 ' ': ' ',
+                        '&': '.-...',
+                        "'": '.----.',
+                        '@': '.--.-.',
+                        '(': '-.--.',
+                        ')': '-.--.-',
+                        ':': '---...',
+                        ',': '--..--',
+                        '=': '-...-',
+                        '!': '-.-.--',
+                        '.': '.-.-.-',
+                        '-': '-....-',
+                        '*': '-..-',
+                        '%': '------..-.-----',
+                        '+': '.-.-.',
+                        '"': '.-..-.',
+                        '?': '..--..',
+                        '/': '-..-.',
                 }
 
 #GUI
@@ -76,18 +94,17 @@ def interWordDelay():
         sleep(3.5)
 
 #---------------------------------------------------------------------------------------------------------------------->#Morse Code Generator
+#Morse Code Generator
 def text_retrieve():
         input = mcText.get("1.0", "end-1c" ).upper()
         if len(input) > 12:
                 #global dynLabel
                 dynLabel["text"] = "You have exceeded the 12 character limit."
-
         elif len(input) < 1:
                 dynLabel["text"] = "Enter text to convert to Morse Code."
         else:
                 mcConvert(input)
                 mcFlash(input)
-        return
 
 def mcConvert(input):
         morse =""
@@ -97,20 +114,20 @@ def mcConvert(input):
                         dynLabel["text"] = "Conversion: "+morse
 
 def mcFlash(input):
-                for symbol in MCode[input]:
-                        if letter == ".":
+                morse =""
+                for letter in input:
+                        if letter in MCode:
+                                morse+=MCode[letter] + ""
+
+                for symbol in morse:
+                        if symbol == ".":
                                 dot()
                                 interCharDelay()
-                        if letter == "-":
+                        if symbol == "-":
                                 dash()
                                 interCharDelay()
-                        if letter == " ":
+                        if symbol == " ":
                                 interWordDelay()
-                return
-
-
-
-
 
 
 #Exit
@@ -125,10 +142,10 @@ mcLabel1 = Label(win, text = "Enter Text to Convert Into Morse Code", font = myF
 mcLabel1.pack(pady = 10)
 mcLabel1.grid(row = 0, column = 1)
 
-mcLabel2 = Label(win, text = "(Limit: 12 char - No Spaces)", font = myFont, width = 60, height = 2)
+mcLabel2 = Label(win, text = "(Limit: 12 char)", font = myFont, width = 60, height = 2)
 mcLabel2.grid(row = 1, column = 1)
 
-#Error Label
+#Error and Output Label
 dynLabel = Label(win, text = "", font = myFont, width = 55, height = 3)
 dynLabel.grid(row = 3, column = 1)
 
@@ -139,10 +156,6 @@ mcText.grid(row = 2, column = 1)
 #mcButton
 mcButton = Button(win, text = "Convert", font = myFont, command = text_retrieve, bg = "white", height = 2, width = 20)
 mcButton.grid(row = 4, column = 1)
-
-mcCanvas = Canvas(win, height = 40, width = 6)
-mcCanvas.grid(row = 6, column = 1)
-
 
 #Exit
 exitButton = Button(win, text = "Exit", font = myFont, command = close, bg = "white", height = 1, width = 5)
